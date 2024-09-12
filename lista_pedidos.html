@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Lista de Pedidos</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"> 
+</head>
+<body>
+  <h1>Lista de Pedidos</h1>
+  <div class="container"> 
+
+  <div style="display: flex;"> 
+    <table border="1">
+      <thead>
+        <tr>
+    
+          <th>Cliente</th>
+          <th>Produto</th>
+          <th>Quantidade</th>
+          <th>Preço Unitário</th>
+          <th>Total</th>
+          <th>Pago</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for pedido in pedidos %}
+        <tr class="{{ 'pago' if pedido.pago else '' }}">
+          <td>{{ pedido.cliente }}</td> {# Essa linha estava indentada incorretamente #}
+          <td>{{ pedido.produto.nome }}</td>
+          <td>{{ pedido.quantidade }}</td>
+          <td>R$ {{ pedido.produto.preco }}</td>
+          <td>R$ {{ pedido.produto.preco * pedido.quantidade }}</td>
+          <td>
+            {% if pedido.pago %}
+            Sim
+            {% else %}
+            Não
+            {% endif %}
+          </td>
+          <td>
+            {% if not pedido.pago %}
+            <a href="{{ url_for('pagar', id=pedido.id) }}">Pagar</a>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <div class="total-cliente-container">
+        <h2>Total por Cliente</h2>
+        <table border="1">
+          <thead>
+            <tr>
+              <th>Cliente</th>
+              <th>Total</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for cliente, info in total_por_cliente.items() %}
+            <tr>
+              <td>{{ cliente }}</td>
+              <td>R$ {{ info.total }}</td>
+              <td>
+                {% if info.pago %}
+                    Pago
+                {% else %}
+                    Não Pago 
+                {% endif %}
+            </td>
+              <td><a href="#" onclick="imprimirDetalhes('{{ cliente }}')">Imprimir</a></td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+<br><br><br>
+ <h2>Total: R$ {{ total }}</h2>
+
+ <div class="botoes-container-a">
+  <a href="{{ url_for('index') }}">Voltar</a><br><br>
+  <a href="{{ url_for('apagar_todos') }}" onclick="return confirm('Tem certeza que deseja apagar todos os pedidos? Esta ação não poderá ser desfeita.');"> Apagar Todos os Pedidos</a> <br><br><br>
+ </div>
+    </div></div>
+
+    <script>
+      function imprimirDetalhes(cliente) {
+        var url = "{{ url_for('imprimir', cliente='CLIENTE') }}".replace('CLIENTE', cliente);
+        var janela = window.open(url, '_blank');
+        janela.onload = function() {
+          janela.print();
+        };
+      }
+      // ... (outros scripts) ...
+    </script>
+  <script>
+    // ... (código JavaScript para duplo clique) ...
+  </script>
+</body>
+</html>

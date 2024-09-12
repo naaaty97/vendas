@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Relatório de Vendas - {{ cliente }} </title>
+
+  <style>
+    @media print {
+      body { 
+        font-family: Arial, sans-serif;
+        font-size: 12pt;
+        margin: 1cm;
+      }
+      .empresa {
+ 
+     justify-content: center;
+     gap: 40px;
+     margin-left: 50px; /* Ajuste conforme necessário */
+     margin-right: 50px; /* Ajuste conforme necessário */
+
+      }
+      .relatorio {
+        float: right;
+      }
+    }
+  </style>
+ </head>
+ <body>
+   
+    <div class="empresa">
+        <p> POINT DA LU </p>
+        <p>Endereço: ...</p>
+        <p>Telefone: 71983353540 </p>
+    
+<br> <br> <br> 
+    <h1> Pedido de {{ cliente }}</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Produto</th>
+                <th>Quantidade</th>
+                <th>Preço Unitário</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for pedido in pedidos %}
+            <tr>
+                <td>{{ pedido.produto.nome }}</td>
+                <td>{{ pedido.quantidade }}</td>
+                <td>R$ {{ pedido.produto.preco }}</td>
+                <td>R$ {{ pedido.produto.preco * pedido.quantidade }}</td>
+            </tr>
+            {% endfor %}
+        <br><br>
+        </table>
+
+        <h2>Total: R$ {{ total_cliente }} </h2>
+      </div>
+</body>
+</html>

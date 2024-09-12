@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Sistema de Vendas POINT DA LU </title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  </head>
+<body class="centralizar-index">
+  <h1>Sistema de Vendas</h1>
+
+  <h2>Novo Pedido</h2>
+  <form method="POST" id="pedidoForm">
+    <label for="cliente">Cliente:</label>
+    <input type="text" name="cliente" tabindex="1" required><br><br>
+
+    <label for="produto">Produto:</label>
+    <select name="produto" tabindex="2" required>
+      {% for produto in produtos %}
+      <option value="{{ produto.id }}">{{ produto.nome }} - R$ {{ produto.preco }}</option>
+      {% endfor %}
+    </select><br><br>
+
+    <label for="quantidade">Quantidade:</label>
+    <input type="number" name="quantidade" value="1" min="1" tabindex="3" required>
+
+    <div class="botoes-container">
+    <input type="submit" value="Adicionar Pedido" tabindex="4">
+  </form>
+
+  <a href="{{ url_for('lista_pedidos') }}">Ver Lista de Pedidos</a>
+  <a href="{{ url_for('produtos') }}">Produtos</a>
+   </div>
+
+  <script>
+    const pedidoForm = document.getElementById('pedidoForm');
+    const inputs = pedidoForm.querySelectorAll('input, select');
+
+    inputs.forEach((input, index) => {
+      input.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter') {
+          event.preventDefault(); // Impede o envio do formulário ao pressionar Enter em campos intermediários
+          if (index < inputs.length - 1) {
+            inputs[index + 1].focus();
+          } else {
+            pedidoForm.submit(); // Envia o formulário ao pressionar Enter no último campo
+          }
+        }
+      });
+    });
+  </script>
+</body>
+</html>
